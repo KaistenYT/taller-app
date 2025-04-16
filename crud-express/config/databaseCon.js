@@ -43,7 +43,7 @@ async function createRecepcionTable() {
     if (!exists) {
         await knex.schema.createTable('recepcion', (table) => {
             table.increments('idRecepcion').primary();
-            table.dateTime('fechaRecepcion');
+            table.date('fechaRecepcion');
             table.integer('idEquipo').unsigned().references('idEquipo').inTable('equipos');
             table.integer('idPropietario').unsigned().references('idPropietario').inTable('propietario');
             table.string('estado');

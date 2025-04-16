@@ -33,7 +33,7 @@ class RecepcionController{
 
         try {
             const [idRecepcion] = await Recepcion.create({
-                fechaRecepcion: fechaRecepcion,
+                fechaRecepcion: '/'+ fechaRecepcion.setDate() + '/' + (fechaRecepcion.setMonth() + 1 + '/' + fechaRecepcion.setFullYear()),
                 idEquipo: idEquipo,
                 idPropietario: idPropietario,
                 estado: estado
