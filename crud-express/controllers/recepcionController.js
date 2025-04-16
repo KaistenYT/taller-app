@@ -28,13 +28,12 @@ class RecepcionController{
 
     }
     static async createRecepcion(req, res) {
-        const { idEquipo, idPropietario, estado } = req.body;
+        const { idPropietario, estado } = req.body;
         const fechaRecepcion = new Date(); 
 
         try {
             const [idRecepcion] = await Recepcion.create({
                 fechaRecepcion: '/'+ fechaRecepcion.setDate() + '/' + (fechaRecepcion.setMonth() + 1 + '/' + fechaRecepcion.setFullYear()),
-                idEquipo: idEquipo,
                 idPropietario: idPropietario,
                 estado: estado
             });
@@ -48,90 +47,34 @@ class RecepcionController{
     }
 
     static async updateRecepcion(req, res){
-        const id = req.params.id
-        const { fechaRecepcion, idEquipo, idPropietario, estado } = req.body
-
+        const id = req.params.id;
+        const recepcionActualizada = req.body;
         try{
-            const updatedRecepcion = await Recepcion.update(id, { fechaRecepcion, idEquipo, idPropietario, estado })
-            if(updatedRecepcion){
+            const filasActualizadas = await Recepcion.update(id, recepcionActualizada)
+            if(filasActualizadas){
                 res.json({message: 'Recepcion actualizada'})
             }else{
                 res.status(404).json({message: 'Recepcion no encontrada'})
             }
         }catch(error){
-            console.error('Error al actualizar la recepcion:', error)
-            res.status(500).json({message: 'Error al actualizar la recepcion'})
+            console.error('Error al actualizar la recepcion:', error.message)
+            res.status(500).json({error:'Error al actualizar la recepcion' + error.message})
         }
     }
-
     static async deleteRecepcion(req, res){
-        const id = req.params.id
+        const id = req.params.id;
         try{
-            const deletedRecepcion = await Recepcion.delete(id)
-            if(deletedRecepcion){
+            const filasEliminadas = await Recepcion.delete(id);
+            if(filasEliminadas){
                 res.json({message: 'Recepcion eliminada'})
             }else{
                 res.status(404).json({message: 'Recepcion no encontrada'})
             }
         }catch(error){
-            console.error('Error al eliminar la recepcion:', error)
-            res.status(500).json({message: 'Error al eliminar la recepcion'})
+            console.error('Error al eliminar la recepcion:', error.message)
+            res.status(500).json({error:'Error al eliminar la recepcion' + error.message})
         }
     }
-    static async getRecepcionByPropietario(req, res){
-        const idPropietario = req.params.idPropietario
-        try{
-            const recepcion = await Recepcion.getRecepcionByPropietario(idPropietario)
-            if(recepcion){
-                res.json(recepcion)
-            }else{
-                res.status(404).json({message: 'Recepcion no encontrada'})
-            }
-        }catch(error){
-            console.error('Error al obtener la recepcion de la base de datos:', error)
-        }
-    }
-    static async getRecepcionByEquipo(req, res){
-        const idEquipo = req.params.idEquipo
-        try{
-            const recepcion = await Recepcion.getRecepcionByEquipo(idEquipo)
-            if(recepcion){
-                res.json(recepcion)
-            }else{
-                res.status(404).json({message: 'Recepcion no encontrada'})
-            }
-        }catch(error){
-            console.error('Error al obtener la recepcion de la base de datos:', error)
-        }
-    }
-    static async getRecepcionByEstado(req, res){
-        const estado = req.params.estado
-        try{
-            const recepcion = await Recepcion.getRecepcionByEstado(estado)
-            if(recepcion){
-                res.json(recepcion)
-            }else{
-                res.status(404).json({message: 'Recepcion no encontrada'})
-            }
-        }catch(error){
-            console.error('Error al obtener la recepcion de la base de datos:', error)
-        }
-    }
-    static async getRecepcionByFecha(req, res){
-        const fechaRecepcion = req.params.fechaRecepcion
-        try{
-            const recepcion = await Recepcion.getRecepcionByFecha(fechaRecepcion)
-            if(recepcion){
-                res.json(recepcion)
-            }else{
-                res.status(404).json({message: 'Recepcion no encontrada'})
-            }
-        }catch(error){
-            console.error('Error al obtener la recepcion de la base de datos:', error)
-        }
-    }
-
-
 
 
 }

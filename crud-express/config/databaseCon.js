@@ -5,21 +5,7 @@ const knex = require('knex')({
     },
   });
 
-// Crear la tabla equipos
-async function createEquiposTable() {
-    const exists = await knex.schema.hasTable('equipos');
-    if (!exists) {
-        await knex.schema.createTable('equipos', (table) => {
-            table.increments('idEquipo').primary();
-            table.string('marca');
-            table.string('modelo');
-            table.string('observacion');
-        });
-        console.log("Tabla 'equipos' creada");
-    } else {
-        console.log("Tabla 'equipos' ya existe");
-    }
-}
+
 
 // Crear la tabla propietario
 async function createPropietarioTable() {
@@ -42,9 +28,11 @@ async function createRecepcionTable() {
     const exists = await knex.schema.hasTable('recepcion');
     if (!exists) {
         await knex.schema.createTable('recepcion', (table) => {
-            table.increments('idRecepcion').primary();
-            table.date('fechaRecepcion');
-            table.integer('idEquipo').unsigned().references('idEquipo').inTable('equipos');
+            table.increments('idRecepcion').primary()
+            table.date('fechaRecepcion')
+           table.string('descripcionEquipo')
+           table.string('falla')
+           table.string('observacion')
             table.integer('idPropietario').unsigned().references('idPropietario').inTable('propietario');
             table.string('estado');
         });
