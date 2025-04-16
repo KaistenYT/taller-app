@@ -10,7 +10,7 @@ async function startServer() {
   const port = 3000;
 
   app.use(bodyParser.json());
-  app.use('/api', equiposRouter)
+
   app.use('/api', propietarioRouter)
   app.use('/api', RecepcionRouter)
 
