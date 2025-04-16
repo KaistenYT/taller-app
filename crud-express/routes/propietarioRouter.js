@@ -7,3 +7,5 @@ router.get('/propietarios/:id', PropietarioController.getPropietarioById)
 router.post('/propietarios/agregar',PropietarioController.createPropietarrio)
 router.put('/propietario/:id/actualizar', PropietarioController.updatePropietario)
 router.delete('/propietario/:id/eliminar', PropietarioController.deletePropietario)
+
+module.exports = router;
