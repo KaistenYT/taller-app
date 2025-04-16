@@ -1,46 +1,14 @@
-let knex = require('knex')({
+const knex = require('knex')({
     client: 'mysql2',
     connection: {
         host: '127.0.0.1',
         port: 3306,
         user: "root",
         password: 'Nyx7811@',
-        // database:'nueva_base_de_datos' // Comentamos esto por ahora
-    }
+        database: 'bd_taller_nl'
+    },
+    pool: { min: 2, max: 10 }
 });
-
-const databaseName = 'nueva_base_de_datos';
-
-async function createDatabaseAndTables() {
-    try {
-        // 1. Crear la base de datos (si no existe)
-        await knex.raw(`CREATE DATABASE IF NOT EXISTS ??`, [databaseName]);
-        console.log(`Base de datos '${databaseName}' creada exitosamente (si no existía).`);
-
-        // 2. Cambiar la conexión para usar la nueva base de datos
-        knex.destroy(); // Destroy the old connection
-        knex = require('knex')({
-            client: 'mysql2',
-            connection: {
-                host: '127.0.0.1',
-                port: 3306,
-                user: "root",
-                password: 'Nyx7811@',
-                database: databaseName
-            }
-        });
-
-        // 3. Crear las tablas
-        await createEquiposTable();
-        await createPropietarioTable();
-        await createRecepcionTable();
-
-    } catch (error) {
-        console.error('Error durante la creación de la base de datos o las tablas:', error);
-    } finally {
-        await knex.destroy(); // Cierra la conexión al final
-    }
-}
 
 // Crear la tabla equipos
 async function createEquiposTable() {
@@ -91,4 +59,13 @@ async function createRecepcionTable() {
     }
 }
 
-createDatabaseAndTables();
+async function createInitialTables() {
+    await createEquiposTable();
+    await createPropietarioTable();
+    await createRecepcionTable();
+    //await knex.destroy(); // Cierra la conexión después de crear las tablas
+}
+
+createInitialTables();
+
+module.exports = knex;
