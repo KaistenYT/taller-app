@@ -43,10 +43,10 @@ async function createRecepcionTable() {
 }
 
 async function createInitialTables() {
-    await createEquiposTable();
+
     await createPropietarioTable();
     await createRecepcionTable();
-    //await knex.destroy(); // Cierra la conexión después de crear las tablas
+  
 }
 
 createInitialTables();
