@@ -2,7 +2,7 @@ async function startServer() {
   
   const express = require('express');
   const bodyParser = require('body-parser');
-  const equiposRouter = require('./routes/equiposRouter');
+ 
   const propietarioRouter = require('./routes/propietarioRouter')
   const RecepcionRouter = require('./routes/recepcionRoutes')
 
