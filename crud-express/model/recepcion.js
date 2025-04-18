@@ -20,18 +20,7 @@ class Recepcion{
     static async delete(idRecepcion){
         return knex ('recepcion').where('idRecepcion', idRecepcion).del()
     }
-    static async getRecepcionByPropietario(idPropietario){
-        return knex('recepcion').where('idPropietario', idPropietario).select('*')
-    }
-    static async getRecepcionByEquipo(idEquipo){
-        return knex('recepcion').where('idEquipo', idEquipo).select('*')
-    }
-    static async getRecepcionByEstado(estado){
-        return knex('recepcion').where('estado', estado).select('*')
-    }
-    static async getRecepcionByFecha(fechaRecepcion){
-        return knex('recepcion').where('fechaRecepcion', fechaRecepcion).select('*')
-    }
+ 
 }
 
 module.exports = Recepcion;

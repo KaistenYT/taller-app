@@ -5,7 +5,7 @@ const RecepcionController  = require ('../controllers/recepcionController')
 
 router.get('/recepciones/listar', RecepcionController.getAllRecepcion)
 router.get('/recepciones/:id', RecepcionController.getRecepcionById)
-router.post('/recepciones/agregar', RecepcionController.createRecepcion)
+router.post('/recepciones/:idPropietario/agregar', RecepcionController.createRecepcion)
 router.put('/recepciones/:id/actualizar', RecepcionController.updateRecepcion)
 router.delete('/recepciones/:id/eliminar', RecepcionController.deleteRecepcion)
 module.exports= router;
