@@ -1,10 +1,19 @@
 import Propietario from '../model/propietario.js';
 
 export class PropietarioController {
-    static async getAllPropietarios() {
+    static async getAllPropietarios(req, res) {
         try {
             const propietarios = await Propietario.getAll();
-            return propietarios;
+            res.render('pages/propietarios', { propietarios });
+        } catch (error) {
+            console.error('Error al obtener los propietarios:', error);
+            res.status(500).render('pages/error', { error: 'Error al cargar los propietarios' });
+        }
+    }
+
+    static async getPropietariosData() {
+        try {
+            return await Propietario.getAll();
         } catch (error) {
             console.error('Error al obtener los propietarios:', error);
             throw error;

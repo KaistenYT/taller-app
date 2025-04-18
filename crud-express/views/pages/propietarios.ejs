@@ -40,7 +40,7 @@
                         <th>Descripcion</th>
                         <th>Cedula</th>                       
                         <th>Teléfono</th>
-                        <th>Acciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -50,11 +50,7 @@
                             <td><%= propietario.descripcion %></td>
                             <td><%= propietario.cedula %></td>
                             <td><%= propietario.telefono %></td>
-                            <td>
-                                <a href="/propietario/<%= propietario.id %>">Ver</a>
-                                <a href="/propietario/<%= propietario.id %>/editar">Editar</a>
-                                <button onclick="eliminarPropietario('<%= propietario.id %>')">Eliminar</button>
-                            </td>
+                           
                         </tr>
                     <% }); %>
                 </tbody>

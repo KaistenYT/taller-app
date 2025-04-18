@@ -3,10 +3,14 @@ import { PropietarioController } from '../controllers/propietarioController.js';
 
 const router = express.Router();
 
-router.get('/propietarios', PropietarioController.getAllPropietarios);
-router.get('/propietarios/:id', PropietarioController.getPropietarioById);
-router.post('/propietarios/agregar', PropietarioController.createPropietarrio);
-router.put('/propietario/:id/actualizar', PropietarioController.updatePropietario);
-router.delete('/propietario/:id/eliminar', PropietarioController.deletePropietario);
+// Vista de propietarios
+router.get('/', PropietarioController.getAllPropietarios);
+
+// API endpoints
+router.get('/api/propietarios', PropietarioController.getAllPropietarios);
+router.get('/api/propietarios/:id', PropietarioController.getPropietarioById);
+router.post('/api/propietarios/agregar', PropietarioController.createPropietarrio);
+router.put('/api/propietario/:id/actualizar', PropietarioController.updatePropietario);
+router.delete('/api/propietario/:id/eliminar', PropietarioController.deletePropietario);
 
 export default router;

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import propietarioRouter from './routes/propietarioRouter.js';
 import RecepcionRouter from './routes/recepcionRoutes.js';
-import  PropietarioController  from './controllers/propietarioController.js';
+import { PropietarioController } from './controllers/propietarioController.js';
 
 async function startServer() {
   
@@ -18,7 +18,7 @@ async function startServer() {
   // Ruta principal
   app.get('/', async (req, res) => {
     try {
-      const propietarios = await PropietarioController.getAllPropietarios();
+      const propietarios = await PropietarioController.getPropietariosData();
       res.render('pages/index.ejs', {
         nombre: 'Usuario',
         items: ['Item 1', 'Item 2', 'Item 3'],
@@ -30,18 +30,8 @@ async function startServer() {
     }
   });
 
-  // Ruta para listar propietarios
-  app.get('/propietarios', async (req, res) => {
-    try {
-      const propietarios = await PropietarioController.getAllPropietarios();
-      res.render('pages/propietarios', { propietarios });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).render('pages/error', { error: 'Error al cargar los propietarios' });
-    }
-  });
-
-  app.use('/api', propietarioRouter);
+  // Rutas de propietarios
+  app.use('/propietarios', propietarioRouter);
   app.use('/api', RecepcionRouter);
 
   app.listen(port, () => {
