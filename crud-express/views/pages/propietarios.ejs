@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Propietarios</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Propietarios</h1>
+        
+        <% if (propietarios && propietarios.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripcion</th>
+                        <th>Cedula</th>                       
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% propietarios.forEach(function(propietario) { %>
+                        <tr>
+                            <td><%= propietario.idPropietario %></td>
+                            <td><%= propietario.descripcion %></td>
+                            <td><%= propietario.cedula %></td>
+                            <td><%= propietario.telefono %></td>
+                            <td>
+                                <a href="/propietario/<%= propietario.id %>">Ver</a>
+                                <a href="/propietario/<%= propietario.id %>/editar">Editar</a>
+                                <button onclick="eliminarPropietario('<%= propietario.id %>')">Eliminar</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No hay propietarios registrados.</p>
+        <% } %>
+    </div>
+
+    <script>
+    function eliminarPropietario(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar este propietario?')) {
+            fetch(`/api/propietario/${id}/eliminar`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar el propietario');
+            });
+        }
+    }
+    </script>
+</body>
+</html>
