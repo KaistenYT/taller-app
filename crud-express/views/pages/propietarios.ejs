@@ -61,15 +61,15 @@
                 <form id="formNuevoPropietario">
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="descripcion" required>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" required>
                     </div>
                     <div class="mb-3">
                         <label for="cedula" class="form-label">Cédula</label>
-                        <input type="text" class="form-control" id="cedula" required>
+                        <input type="text" class="form-control" id="cedula" name="cedula" required>
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="tel" class="form-control" id="telefono" required>
+                        <input type="tel" class="form-control" id="telefono" name="telefono" required>
                     </div>
                 </form>
             </div>
@@ -81,54 +81,145 @@
     </div>
 </div>
 
+<!-- Modal Editar Propietario -->
+<div class="modal fade" id="editarPropietarioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Propietario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarPropietario">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label for="editDescripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="editDescripcion" name="descripcion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCedula" class="form-label">Cédula</label>
+                        <input type="text" class="form-control" id="editCedula" name="cedula" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTelefono" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="editTelefono" name="telefono" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarPropietario()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-function eliminarPropietario(id) {
-    if (confirm('¿Estás seguro de que deseas eliminar este propietario?')) {
-        fetch(`/api/propietario/${id}/eliminar`, {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error al eliminar el propietario');
+async function guardarPropietario() {
+    const formData = {
+        descripcion: document.getElementById('descripcion').value,
+        cedula: document.getElementById('cedula').value,
+        telefono: document.getElementById('telefono').value
+    };
+
+    try {
+        const response = await fetch('/api/propietarios/agregar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert('Propietario creado exitosamente');
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al crear el propietario: ' + error.message);
     }
 }
 
-function guardarPropietario() {
-    const descripcion = document.getElementById('descripcion').value;
-    const cedula = document.getElementById('cedula').value;
-    const telefono = document.getElementById('telefono').value;
+async function eliminarPropietario(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar este propietario?')) {
+        try {
+            const response = await fetch(`/api/propietarios/${id}`, {
+                method: 'DELETE'
+            });
 
-    fetch('/api/propietario/crear', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            descripcion,
-            cedula,
-            telefono
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Propietario creado exitosamente');
-        location.reload();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al crear el propietario');
-    });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Propietario eliminado exitosamente');
+                window.location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el propietario: ' + error.message);
+        }
+    }
 }
 
-function editarPropietario(id) {
-    // Implementar la edición
-    alert('Función de edición en desarrollo');
+async function editarPropietario(id) {
+    try {
+        const response = await fetch(`/api/propietarios/${id}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Llenar el formulario con los datos del propietario
+            document.getElementById('editId').value = data.idPropietario;
+            document.getElementById('editDescripcion').value = data.descripcion;
+            document.getElementById('editCedula').value = data.cedula;
+            document.getElementById('editTelefono').value = data.telefono;
+            
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('editarPropietarioModal'));
+            modal.show();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al obtener los datos del propietario: ' + error.message);
+    }
+}
+
+async function actualizarPropietario() {
+    const id = document.getElementById('editId').value;
+    const formData = {
+        descripcion: document.getElementById('editDescripcion').value,
+        cedula: document.getElementById('editCedula').value,
+        telefono: document.getElementById('editTelefono').value
+    };
+
+    try {
+        const response = await fetch(`/api/propietarios/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Propietario actualizado exitosamente');
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al actualizar el propietario: ' + error.message);
+    }
 }
 </script>
 

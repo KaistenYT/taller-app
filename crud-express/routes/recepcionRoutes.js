@@ -1,11 +1,17 @@
-const express = require('express')
-const router = express.Router()
-const RecepcionController  = require ('../controllers/recepcionController')
+import express from 'express';
+import { RecepcionController } from '../controllers/recepcionController.js';
+
+const router = express.Router();
+
+// Rutas para vistas (accedidas desde /recepciones)
+router.get('/', RecepcionController.getAllRecepciones);
+
+// Rutas API (accedidas desde /api/recepciones)
+router.get('/', RecepcionController.getAllRecepciones);
+router.post('/agregar', RecepcionController.createRecepcion);
+router.get('/:id', RecepcionController.getRecepcionById);
+router.put('/:id', RecepcionController.updateRecepcion);
+router.delete('/:id', RecepcionController.deleteRecepcion);
 
 
-router.get('/recepciones/listar', RecepcionController.getAllRecepcion)
-router.get('/recepciones/:id', RecepcionController.getRecepcionById)
-router.post('/recepciones/:idPropietario/agregar', RecepcionController.createRecepcion)
-router.put('/recepciones/:id/actualizar', RecepcionController.updateRecepcion)
-router.delete('/recepciones/:id/eliminar', RecepcionController.deleteRecepcion)
-module.exports= router;
+export default router;

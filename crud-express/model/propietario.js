@@ -1,24 +1,24 @@
-import knex from '../config/databaseCon.js';
+import db from '../config/databaseCon.js';
 
-export class Propietario {
+class Propietario {
     static async getAll() {
-        return knex('propietario').select('*');
+        return await db('propietario').select('*');
     }
 
-    static async getById(idPropietario) {
-        return knex('propietario').where('idPropietario', idPropietario).first();
+    static async getById(id) {
+        return await db('propietario').where('idPropietario', id).first();
     }
 
     static async create(propietario) {
-        return knex('propietario').insert(propietario);
+        return await db('propietario').insert(propietario);
     }
 
-    static async update(idPropietario, propietario) {
-        return knex('propietario').where('idPropietario', idPropietario).update(propietario);
+    static async update(id, propietario) {
+        return await db('propietario').where('idPropietario', id).update(propietario);
     }
 
-    static async delete(idPropietario) {
-        return knex('propietario').where('idPropietario', idPropietario).del();
+    static async delete(id) {
+        return await db('propietario').where('idPropietario', id).del();
     }
 }
 

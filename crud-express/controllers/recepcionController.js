@@ -1,14 +1,23 @@
-const Recepcion = require('../model/recepcion');
+import Recepcion from '../model/recepcion.js';
 
-class RecepcionController {
+export class RecepcionController {
     
-    static async getAllRecepcion(req, res) {
+    static async getAllRecepciones(req, res) {
         try {
             const recepciones = await Recepcion.getAll();
-            res.status(200).json(recepciones); 
+            if (req.path.startsWith('/api/')) {
+                return res.json(recepciones);
+            }
+            res.render('pages/recepciones', { recepciones });
         } catch (error) {
             console.error('Error al obtener las recepciones:', error);
-            res.status(500).json({ error: 'Error al obtener las recepciones de la base de datos' }); 
+            if (req.path.startsWith('/api/')) {
+                return res.status(500).json({ 
+                    error: 'Error al obtener las recepciones',
+                    details: error.message 
+                });
+            }
+            res.status(500).render('pages/error', { error: 'Error al cargar las recepciones' });
         }
     }
 
@@ -18,14 +27,17 @@ class RecepcionController {
         try {
             const recepcion = await Recepcion.getById(id);
             if (recepcion) {
-                res.status(200).json(recepcion);
+                res.json(recepcion);
                  
             } else {
                 res.status(404).json({ message: 'Recepción no encontrada' });
             }
         } catch (error) {
             console.error(`Error al obtener la recepción con ID ${id}:`, error);
-            res.status(500).json({ error: `Error al obtener la recepción con ID ${id} de la base de datos` }); 
+            res.status(500).json({ 
+                error: `Error al obtener la recepción con ID ${id}`,
+                details: error.message 
+            }); 
         }
     }
 
@@ -50,7 +62,10 @@ class RecepcionController {
             console.log("Lo que se guardo: " + newRecepcion) 
         } catch (error) {
             console.error('Error al crear la recepción:', error);
-            res.status(500).json({ message: 'Error al crear la recepción' });
+            res.status(500).json({ 
+                error: 'Error al crear la recepción',
+                details: error.message 
+            });
         }
     }
 
@@ -61,13 +76,16 @@ class RecepcionController {
         try {
             const filasActualizadas = await Recepcion.update(id, recepcionActualizada);
             if (filasActualizadas > 0) { 
-                res.status(200).json({ message: 'Recepción actualizada' }); 
+                res.json({ message: 'Recepción actualizada exitosamente' }); 
             } else {
                 res.status(404).json({ message: 'Recepción no encontrada' });
             }
         } catch (error) {
             console.error(`Error al actualizar la recepción con ID ${id}:`, error.message);
-            res.status(500).json({ error: `Error al actualizar la recepción con ID ${id}: ${error.message}` }); 
+            res.status(500).json({ 
+                error: `Error al actualizar la recepción con ID ${id}`,
+                details: error.message 
+            }); 
         }
     }
 
@@ -77,15 +95,18 @@ class RecepcionController {
         try {
             const filasEliminadas = await Recepcion.delete(id);
             if (filasEliminadas > 0) { 
-                res.status(200).json({ message: 'Recepción eliminada' }); 
+                res.json({ message: 'Recepción eliminada exitosamente' }); 
             } else {
                 res.status(404).json({ message: 'Recepción no encontrada' });
             }
         } catch (error) {
             console.error(`Error al eliminar la recepción con ID ${id}:`, error.message);
-            res.status(500).json({ error: `Error al eliminar la recepción con ID ${id}: ${error.message}` }); 
+            res.status(500).json({ 
+                error: `Error al eliminar la recepción con ID ${id}`,
+                details: error.message 
+            }); 
         }
     }
 }
 
-module.exports = RecepcionController;
+export default RecepcionController;

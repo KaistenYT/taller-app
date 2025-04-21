@@ -1,17 +1,17 @@
-const knex = require('knex')({
+import knex from 'knex';
+
+const db = knex({
     client: 'sqlite3', 
     connection: {
       filename: './mydb.sqlite',
     },
-  });
-
-
+});
 
 // Crear la tabla propietario
 async function createPropietarioTable() {
-    const exists = await knex.schema.hasTable('propietario');
+    const exists = await db.schema.hasTable('propietario');
     if (!exists) {
-        await knex.schema.createTable('propietario', (table) => {
+        await db.schema.createTable('propietario', (table) => {
             table.increments('idPropietario').primary();
             table.string('descripcion');
             table.string('cedula');
@@ -25,14 +25,14 @@ async function createPropietarioTable() {
 
 // Crear la tabla recepcion
 async function createRecepcionTable() {
-    const exists = await knex.schema.hasTable('recepcion');
+    const exists = await db.schema.hasTable('recepcion');
     if (!exists) {
-        await knex.schema.createTable('recepcion', (table) => {
+        await db.schema.createTable('recepcion', (table) => {
             table.increments('idRecepcion').primary()
             table.date('fechaRecepcion')
-           table.string('descripcionEquipo')
-           table.string('falla')
-           table.string('observacion')
+            table.string('descripcionEquipo')
+            table.string('falla')
+            table.string('observacion')
             table.integer('idPropietario').unsigned().references('idPropietario').inTable('propietario');
             table.string('estado');
         });
@@ -43,12 +43,10 @@ async function createRecepcionTable() {
 }
 
 async function createInitialTables() {
-
     await createPropietarioTable();
     await createRecepcionTable();
-  
 }
 
 createInitialTables();
 
-module.exports = knex;
+export default db;
