@@ -3,36 +3,34 @@
 <div class="row">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Lista de Propietarios</h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoPropietarioModal">
-                <i class="bi bi-plus-circle"></i> Nuevo Propietario
+            <h1>Lista de Clientes</h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoClienteModal">
+                <i class="bi bi-plus-circle"></i> Nuevo Cliente
             </button>
         </div>
 
-        <% if (propietarios && propietarios.length > 0) { %>
+        <% if (clients && clients.length > 0) { %>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
                             <th>Descripción</th>
-                            <th>Cédula</th>
                             <th>Teléfono</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% propietarios.forEach(function(propietario) { %>
+                        <% clients.forEach(function(client) { %>
                             <tr>
-                                <td><%= propietario.idPropietario %></td>
-                                <td><%= propietario.descripcion %></td>
-                                <td><%= propietario.cedula %></td>
-                                <td><%= propietario.telefono %></td>
+                                <td><%= client.idCliente %></td>
+                                <td><%= client.descripcion %></td>
+                                <td><%= client.telefono %></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editarPropietario('<%= propietario.idPropietario %>')">
+                                    <button class="btn btn-sm btn-warning" onclick="editarCliente('<%= client.idCliente %>')">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="eliminarPropietario('<%= propietario.idPropietario %>')">
+                                    <button class="btn btn-sm btn-danger" onclick="eliminarCliente('<%= client.idCliente %>')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -43,29 +41,25 @@
             </div>
         <% } else { %>
             <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> No hay propietarios registrados.
+                <i class="bi bi-info-circle"></i> No hay clientes registrados.
             </div>
         <% } %>
     </div>
 </div>
 
-<!-- Modal Nuevo Propietario -->
-<div class="modal fade" id="nuevoPropietarioModal" tabindex="-1">
+<!-- Modal Nuevo Cliente -->
+<div class="modal fade" id="nuevoClienteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Nuevo Propietario</h5>
+                <h5 class="modal-title">Nuevo Cliente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="formNuevoPropietario">
+                <form id="formNuevoCliente">
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
                         <input type="text" class="form-control" id="descripcion" name="descripcion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cedula" class="form-label">Cédula</label>
-                        <input type="text" class="form-control" id="cedula" name="cedula" required>
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
@@ -75,30 +69,26 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarPropietario()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Editar Propietario -->
-<div class="modal fade" id="editarPropietarioModal" tabindex="-1">
+<!-- Modal Editar Cliente -->
+<div class="modal fade" id="editarClienteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar Propietario</h5>
+                <h5 class="modal-title">Editar Cliente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="formEditarPropietario">
+                <form id="formEditarCliente">
                     <input type="hidden" id="editId">
                     <div class="mb-3">
                         <label for="editDescripcion" class="form-label">Descripción</label>
                         <input type="text" class="form-control" id="editDescripcion" name="descripcion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editCedula" class="form-label">Cédula</label>
-                        <input type="text" class="form-control" id="editCedula" name="cedula" required>
                     </div>
                     <div class="mb-3">
                         <label for="editTelefono" class="form-label">Teléfono</label>
@@ -108,22 +98,21 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="actualizarPropietario()">Guardar cambios</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarCliente()">Guardar cambios</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-async function guardarPropietario() {
+async function guardarCliente() {
     const formData = {
         descripcion: document.getElementById('descripcion').value,
-        cedula: document.getElementById('cedula').value,
         telefono: document.getElementById('telefono').value
     };
 
     try {
-        const response = await fetch('/api/propietarios/agregar', {
+        const response = await fetch('/api/clientes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -134,73 +123,70 @@ async function guardarPropietario() {
         const data = await response.json();
         
         if (response.ok) {
-            alert('Propietario creado exitosamente');
-            window.location.reload();
+            alert(data.message);
+            window.location.href = '/clientes';
         } else {
             alert('Error: ' + data.error);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al crear el propietario: ' + error.message);
+        alert('Error al crear el cliente: ' + error.message);
     }
 }
 
-async function eliminarPropietario(id) {
-    if (confirm('¿Estás seguro de que deseas eliminar este propietario?')) {
+async function eliminarCliente(id) {
+    if (confirm('¿Está seguro de que desea eliminar este cliente?')) {
         try {
-            const response = await fetch(`/api/propietarios/${id}`, {
+            const response = await fetch(`/api/clientes/${id}`, {
                 method: 'DELETE'
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                alert('Propietario eliminado exitosamente');
-                window.location.reload();
+                alert(data.message);
+                window.location.href = '/clientes';
             } else {
                 alert('Error: ' + data.error);
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error al eliminar el propietario: ' + error.message);
+            alert('Error al eliminar el cliente: ' + error.message);
         }
     }
 }
 
-async function editarPropietario(id) {
+async function editarCliente(id) {
     try {
-        const response = await fetch(`/api/propietarios/${id}`);
-        const data = await response.json();
+        const response = await fetch(`/api/clientes/${id}`);
+        const result = await response.json();
         
         if (response.ok) {
-            // Llenar el formulario con los datos del propietario
-            document.getElementById('editId').value = data.idPropietario;
+            const data = result.data; 
+            document.getElementById('editId').value = id;
             document.getElementById('editDescripcion').value = data.descripcion;
-            document.getElementById('editCedula').value = data.cedula;
             document.getElementById('editTelefono').value = data.telefono;
             
-            // Mostrar el modal
-            const modal = new bootstrap.Modal(document.getElementById('editarPropietarioModal'));
+            const modal = new bootstrap.Modal(document.getElementById('editarClienteModal'));
             modal.show();
         } else {
-            alert('Error: ' + data.error);
+            alert('Error: ' + result.error);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al obtener los datos del propietario: ' + error.message);
+        alert('Error al obtener los datos del cliente: ' + error.message);
     }
 }
 
-async function actualizarPropietario() {
+async function actualizarCliente() {
     const id = document.getElementById('editId').value;
     const formData = {
         descripcion: document.getElementById('editDescripcion').value,
-        cedula: document.getElementById('editCedula').value,
         telefono: document.getElementById('editTelefono').value
     };
 
     try {
-        const response = await fetch(`/api/propietarios/${id}`, {
+        const response = await fetch(`/api/clientes/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -211,14 +197,14 @@ async function actualizarPropietario() {
         const data = await response.json();
 
         if (response.ok) {
-            alert('Propietario actualizado exitosamente');
-            window.location.reload();
+            alert(data.message);
+            window.location.href = '/clientes';
         } else {
             alert('Error: ' + data.error);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al actualizar el propietario: ' + error.message);
+        alert('Error al actualizar el cliente: ' + error.message);
     }
 }
 </script>

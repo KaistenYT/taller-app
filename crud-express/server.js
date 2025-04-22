@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import propietarioRouter from './routes/propietarioRouter.js';
+import clientRouter from './routes/ClientRouter.js';
 import recepcionRouter from './routes/recepcionRoutes.js';
-import { PropietarioController } from './controllers/propietarioController.js';
+import deviceRouter from './routes/deviceRoutes.js';
 
 async function startServer() {
   const app = express();
@@ -17,33 +17,34 @@ async function startServer() {
   // Configuración de vistas
   app.set('view engine', 'ejs');
 
+  // Rutas API (deben ir antes de las rutas de vistas)
+  app.use('/api/clientes', clientRouter);
+  app.use('/api/recepciones', recepcionRouter);
+  app.use('/api/dispositivos', deviceRouter);
+
   // Ruta principal
-  app.get('/', async (req, res) => {
-    try {
-      const propietarios = await PropietarioController.getPropietariosData();
-      res.render('pages/index.ejs', {
-        nombre: 'Usuario',
-        items: ['Item 1', 'Item 2', 'Item 3'],
-        propietarios: propietarios
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).render('pages/error', { error: 'Error al cargar los propietarios' });
-    }
+  app.get('/', (req, res) => {
+    res.render('pages/index');
   });
 
-  // Rutas de propietarios
-  app.use('/propietarios', propietarioRouter); // Para vistas
-  app.use('/api/propietarios', propietarioRouter); // Para API
-
-  // Rutas de recepciones
-  app.use('/recepciones', recepcionRouter); // Para vistas
-  app.use('/api/recepciones', recepcionRouter); // Para API
+  // Rutas de vistas
+  app.use('/clientes', clientRouter);
+  app.use('/recepciones', recepcionRouter);
+  app.use('/dispositivos', deviceRouter);
 
   // Manejo de errores
   app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    if (req.path.startsWith('/api/')) {
+      res.status(500).json({ 
+        success: false,
+        error: 'Error interno del servidor' 
+      });
+    } else {
+      res.status(500).render('pages/error', { 
+        error: 'Error interno del servidor' 
+      });
+    }
   });
 
   app.listen(port, () => {

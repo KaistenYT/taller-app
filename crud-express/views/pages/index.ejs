@@ -10,35 +10,43 @@
 <body>
     <%- include('../templates/header') %>
 
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1 class="display-4 mb-4">Bienvenido al Sistema de Taller</h1>
-            <p class="lead">Gestiona tus propietarios y recepciones de manera eficiente</p>
-        </div>
-    </div>
-
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <i class="bi bi-people display-4 text-primary mb-3"></i>
-                    <h3>Propietarios</h3>
-                    <p>Administra la información de los propietarios de Equipos</p>
-                    <a href="/propietarios" class="btn btn-primary">
-                        <i class="bi bi-arrow-right"></i> Ir a Propietarios
-                    </a>
+    <div class="container mt-4">
+        <h1 class="mb-4">Sistema de Gestión</h1>
+        
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Clientes</h5>
+                        <p class="card-text">Gestiona la información de los clientes.</p>
+                        <a href="/clientes" class="btn btn-primary">
+                            <i class="bi bi-people"></i> Gestionar Clientes
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <i class="bi bi-clipboard-check display-4 text-success mb-3"></i>
-                    <h3>Recepciones</h3>
-                    <p>Gestiona las recepciones de Equipos en el taller</p>
-                    <a href="/recepciones" class="btn btn-success">
-                        <i class="bi bi-arrow-right"></i> Ir a Recepciones
-                    </a>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Dispositivos</h5>
+                        <p class="card-text">Administra los equipos y dispositivos.</p>
+                        <a href="/dispositivos" class="btn btn-primary">
+                            <i class="bi bi-laptop"></i> Gestionar Dispositivos
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Recepciones</h5>
+                        <p class="card-text">Controla las recepciones de equipos.</p>
+                        <a href="/recepciones" class="btn btn-primary">
+                            <i class="bi bi-clipboard-check"></i> Gestionar Recepciones
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
